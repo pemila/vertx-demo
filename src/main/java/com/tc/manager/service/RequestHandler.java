@@ -1,11 +1,9 @@
 package com.tc.manager.service;
 
 import io.vertx.core.Handler;
-import io.vertx.core.http.HttpServerRequest;
-import io.vertx.core.json.Json;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.buffer.impl.BufferImpl;
 import io.vertx.ext.web.RoutingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * @author pemila
@@ -13,18 +11,10 @@ import org.apache.logging.log4j.Logger;
  **/
 public class RequestHandler implements Handler<RoutingContext> {
 
-    private Logger log = LogManager.getLogger(this.getClass());
-
     @Override
     public void handle(RoutingContext event) {
-
-        log.info(event.normalisedPath());
-
-
-        HttpServerRequest request = event.request();
-        log.info(event.getBodyAsJson());
-        log.info(Json.encode(request.query()));
-
-        event.fail(404);
+        Buffer buffer = new BufferImpl();
+        buffer.appendString("this is a world !");
+        event.response().end(buffer);
     }
 }

@@ -44,7 +44,6 @@ public class ApiVerticle extends AbstractVerticle {
 
     private void api(RoutingContext routingContext){
         log.info(routingContext);
-//        routingContext.response().end("end");
         routingContext.request().response().write("hello world").end();
 
         routingContext.fail(404);
