@@ -1,13 +1,14 @@
 package com.tc.manager;
 
+import com.tc.manager.service.FailureHandler;
 import com.tc.manager.service.LogHandler;
 import com.tc.manager.service.RequestHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -17,16 +18,22 @@ import org.apache.logging.log4j.Logger;
  **/
 public class MainVerticle extends AbstractVerticle {
 
-    private Logger log = LogManager.getLogger(this.getClass());
+    private Logger log = LoggerFactory.getLogger(this.getClass());
+
+    private RequestHandler requestHandler;
+    private FailureHandler failureHandler;
 
     @Override
     public void start(Promise<Void> promise){
+        this.requestHandler = new RequestHandler();
+        this.failureHandler = new FailureHandler();
+
         vertx.exceptionHandler(error -> log.error("未捕获的异常：",error));
 
         Router router = Router.router(vertx);
         router.route().handler(BodyHandler.create());
         router.route("/*").handler(new LogHandler());
-        router.route("/api/*").handler(new RequestHandler());
+        router.route("/api/*").handler(requestHandler).failureHandler(failureHandler);
         vertx.createHttpServer()
                 .requestHandler(router)
                 .listen(

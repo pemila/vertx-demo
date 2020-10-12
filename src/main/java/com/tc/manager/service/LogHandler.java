@@ -1,13 +1,14 @@
 package com.tc.manager.service;
 
+import com.tc.manager.constants.HttpStatusCode;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpVersion;
 import io.vertx.core.net.SocketAddress;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.LoggerHandler;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author pemila
@@ -15,7 +16,7 @@ import org.apache.logging.log4j.Logger;
  **/
 public class LogHandler implements LoggerHandler {
 
-    private final Logger logger = LogManager.getLogger(this.getClass());
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final boolean immediate;
 
@@ -75,12 +76,12 @@ public class LogHandler implements LoggerHandler {
     }
 
     protected void doLog(int status, String message) {
-        if (status >= 500) {
-            logger.error(message);
-        } else if (status >= 400) {
-            logger.warn(message);
+        if (status >= HttpStatusCode.RESPONSE_ERROR) {
+            log.error(message);
+        } else if (status >= HttpStatusCode.REQUEST_ERROR) {
+            log.warn(message);
         } else {
-            logger.info(message);
+            log.info(message);
         }
     }
 }

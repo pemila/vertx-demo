@@ -8,9 +8,8 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -19,7 +18,7 @@ import org.apache.logging.log4j.Logger;
  **/
 public class ApiVerticle extends AbstractVerticle {
 
-    private Logger log = LogManager.getLogger(this.getClass());
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void start(Promise<Void> promise) {
@@ -43,7 +42,7 @@ public class ApiVerticle extends AbstractVerticle {
 
 
     private void api(RoutingContext routingContext){
-        log.info(routingContext);
+        log.info("info:{}",routingContext);
         routingContext.request().response().write("hello world").end();
 
         routingContext.fail(404);
