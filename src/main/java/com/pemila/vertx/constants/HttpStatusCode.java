@@ -1,4 +1,4 @@
-package com.tc.manager.constants;
+package com.pemila.vertx.constants;
 
 /**
  * @author pemila
